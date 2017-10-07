@@ -84,7 +84,7 @@
 
 \newcommand{\installttf}{
     %%%% Windows Thesis Fonts
-    \setmainfont{Times New Roman PS Std}
+    \setmainfont{Times New Roman}
     \setsansfont{Arial}
     \setmonofont{Courier New}
     %%%% Using Office Family Fonts
@@ -96,71 +96,16 @@
     \setCJKfamilyfont{hei}{SimHei}
     \setCJKfamilyfont{fs}{FangSong} % fang-song
     \setCJKfamilyfont{kai}{KaiTi} % Kai
+  
 }
 
-\newcommand{\installotf}{
-    %%%% Windows Thesis Fonts
-    \setmainfont{Times New Roman PS Std}
-    \setsansfont{Arial}
-    \setmonofont{Courier New}
-    %%%% Using Adobe Family Fonts
-    \setCJKmainfont[BoldFont={STZhongsong}]{Adobe Song Std}
-    \setCJKsansfont{Adobe Heiti Std} % Hei
-    \setCJKmonofont{Adobe Fangsong Std} % Fangsong
-    %%%% alias
-    \setCJKfamilyfont{song}{Adobe Song Std}
-    \setCJKfamilyfont{hei}{Adobe Heiti Std}
-    \setCJKfamilyfont{fs}{Adobe Fangsong Std} % fang-song
-    \setCJKfamilyfont{kai}{Adobe Kaiti Std} % Kai
-}
 
-\newcommand{\installfz}{
-    %%%% Windows Thesis Fonts
-    \setmainfont{Times New Roman PS Std}
-    \setsansfont{Arial}
-    \setmonofont{Courier New}
-    %%%% Using Founder Family Fonts
-    \setCJKmainfont[BoldFont={FZYaSong-DB-GBK}]{FZShuSong_GB18030-Z01}
-    \setCJKsansfont{FZHei-B01} % Hei
-    \setCJKmonofont{FZFangSong-Z02} % fs
-    %%%% alias
-    \setCJKfamilyfont{song}{FZShuSong_GB18030-Z01}
-    \setCJKfamilyfont{hei}{FZHei-B01}
-    \setCJKfamilyfont{fs}{FZFangSong-Z02} % fang-song
-    \setCJKfamilyfont{kai}{FZKai-Z03} % Kai
-}
 
-\newcommand{\installfandol}{
-    %%%% Windows Thesis Fonts
-    \setmainfont{Times New Roman PS Std}
-    \setsansfont{Arial}
-    \setmonofont{Courier New}
-    %%%% Using Fandol Family Fonts
-    \setCJKmainfont{FandolSong}
-    \setCJKsansfont{FandolHei} % Hei
-    \setCJKmonofont{FandolFang} % fs
-    %%%% alias
-    \setCJKfamilyfont{song}{FandolSong}
-    \setCJKfamilyfont{hei}{FandolHei}
-    \setCJKfamilyfont{fs}{FandolFang} % fang-song
-    \setCJKfamilyfont{kai}{FandolKai} % Kai
-}
 
 \ifisttf
 \installttf
 \fi
 
-\ifisotf
-\installotf
-\fi
-
-\ifisfz
-\installfz
-\fi
-
-\ifisfandol
-\installfandol
-\fi
 
 \newcommand{\cusong}{\bfseries}
 \newcommand{\song}{\CJKfamily{song}}     % 宋体

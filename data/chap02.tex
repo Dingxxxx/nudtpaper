@@ -397,37 +397,80 @@ $$
 我们知道，故障诊断的最终目的，是将故障定位到部件，而由于信号--部件依赖矩阵的存在，因此，实质性的工作是找出由故障部件发出异常信号，
 不妨称为源异常信号，而如前所述，源异常信号与异常信号依赖矩阵$\mathbf{S_a}$的全零列是存在一一对应的关系的。因此，我们只要获得了$\mathbf{S_a}$的全零列的相关信息，
 也就获得了源异常信号的信息，从而能进一步找到故障源。
-通过以上分析，我们构造算法\ref{alg53}，用于实现非回路故障诊断。
+通过以上分析，我们构造算法\ref{algo:53}，用于实现非回路故障诊断。
 \begin{algorithm}[htbp]
-  \caption{非回路故障诊断算法}
-  \label{alg53}
+  \caption{非回路故障诊断算法}  
+  \label{algo:53}
   \begin{algorithmic}[1]
-    \REQUIRE 信号--部件依赖矩阵$\mathbf{A}$，信号依赖矩阵$\mathbf{S}$，信号状态向量$\alpha$
-    \ENSURE 部件状态向量$\gamma$
-    \STATE $\mathbf{P}\leftarrow\left(<\alpha>\right)$
-    \STATE $\mathbf{S_{a}}\leftarrow\mathbf{P^T}\mathbf{S}\mathbf{P}$
-    \FOR{$i=1$ to $S_a$的阶数$m$}
-    \STATE $s_i\leftarrow s_i$的第$i$个行向量
-    \ENDFOR
-    \STATE $\beta_a\leftarrow\lnot \left(s_1\lor s_2\lor \cdots\lor s_m\right)^T$
-    \STATE $\beta\leftarrow\mathbf{P}\beta_a$
-    \STATE $\gamma\leftarrow\mathbf{A}\beta$
+    \Require 信号--部件依赖矩阵$\mathbf{A}$，信号依赖矩阵$\mathbf{S}$，信号状态向量$\alpha$
+    \Ensure 部件状态向量$\gamma$
+    \State $\mathbf{P}\leftarrow\left(<\alpha>\right)$
+    \State $\mathbf{S_{a}}\leftarrow\mathbf{P^T}\mathbf{S}\mathbf{P}$
+    \For{$i=1$ to $S_a$的阶数$m$}
+    \State $s_i\leftarrow s_i$的第$i$个行向量
+    \EndFor
+    \State $\beta_a\leftarrow\lnot \left(s_1\lor s_2\lor \cdots\lor s_m\right)^T$
+    \State $\beta\leftarrow\mathbf{P}\beta_a$
+    \State $\gamma\leftarrow\mathbf{A}\beta$
   \end{algorithmic}
 \end{algorithm}
 
 第一类故障回路推理与非回路故障推理是算法基本相同，稍微不同的是$\beta_a$的计算。因为第一类故障回路中的信号全部可能是源异常信号，因此我们不必计算
 $\beta_a=\lnot \left(\left[s_1\lor s_2\lor \cdots\lor s_m\right]^T\right)$，而直接取$\beta_a=\underbrace{\left[\begin{array}{cccc}1&1&\cdots&1\end{array}\right]^T}_m$，将$\beta_a$代入
-算法\ref{alg53}，有
+算法\ref{algo:53}，有
 \[\beta=\mathbf{P}\beta_a=\mathbf{P}\underbrace{\left[\begin{array}{cccc}1&1&\cdots&1\end{array}\right]^T}_m=\alpha\]
-因此一类故障回路的推理算法变得相当简单，例如算法\ref{alg54}
+因此一类故障回路的推理算法变得相当简单，例如算法\ref{algo:54}
 \begin{algorithm}[htbp]
   \caption{第一类故障回路诊断算法}
-  \label{alg54}
+  \label{algo:54}
   \begin{algorithmic}[1]
-    \REQUIRE 信号--部件依赖矩阵$\mathbf{A}$，信号状态向量$\alpha$
-    \ENSURE 部件状态向量$\gamma$
-    \STATE $\gamma\leftarrow\mathbf{A}\alpha$
+    \Require 信号--部件依赖矩阵$\mathbf{A}$，信号状态向量$\alpha$
+    \Ensure 部件状态向量$\gamma$
+    \State $\gamma\leftarrow\mathbf{A}\alpha$
   \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{用归并排序求逆序数}
+    \begin{algorithmic}[1] %每行显示行号
+        \Require $Array$数组，$n$数组大小
+        \Ensure 逆序数
+        \Function {MergerSort}{$Array, left, right$}
+            \State $result \gets 0$
+            \If {$left < right$}
+                \State $middle \gets (left + right) / 2$
+                \State $result \gets result +$ \Call{MergerSort}{$Array, left, middle$}
+                \State $result \gets result +$ \Call{MergerSort}{$Array, middle, right$}
+                \State $result \gets result +$ \Call{Merger}{$Array,left,middle,right$}
+            \EndIf
+            \State \Return{$result$}
+        \EndFunction
+        \State
+        \Function{Merger}{$Array, left, middle, right$}
+            \State $i\gets left$
+            \State $j\gets middle$
+            \State $k\gets 0$
+            \State $result \gets 0$
+            \While{$i<middle$ \textbf{and} $j<right$}
+                \If{$Array[i]<Array[j]$}
+                    \State $B[k++]\gets Array[i++]$
+                \Else
+                    \State $B[k++] \gets Array[j++]$
+                    \State $result \gets result + (middle - i)$
+                \EndIf
+            \EndWhile
+            \While{$i<middle$}
+                \State $B[k++] \gets Array[i++]$
+            \EndWhile
+            \While{$j<right$}
+                \State $B[k++] \gets Array[j++]$
+            \EndWhile
+            \For{$i = 0 \to k-1$}
+                \State $Array[left + i] \gets B[i]$
+            \EndFor
+            \State \Return{$result$}
+        \EndFunction
+    \end{algorithmic}
 \end{algorithm}
 
 \section{参考文献}
@@ -449,6 +492,16 @@ $\beta_a=\lnot \left(\left[s_1\lor s_2\lor \cdots\lor s_m\right]^T\right)$，而
 在\verb|General:|后加入\verb|language|就可以了。
 
 有时候不想要上标，那么可以这样 \cite{shaheshang}，这个非常重要。
+
+使用 BIB\TeX 需要先对.tex源文件进行编译,然后运行 BIB\TeX 生成文献列表, 然后再对.tex源文件至少编译两次,才能得到有文献列表并正确引用的文档,以 xelatex 为例, 需要的命令是:
+
+\begin{lstlisting}
+xelatex thesis.tex
+bibtex thesis.aux
+xelatex thesis.tex
+xelatex thesis.tex
+\end{lstlisting}
+
 
 \section{代码高亮}
 有些时候我们需要在论文中引入一段代码，用来衬托正文的内容，或者体现关键思路的实现。
